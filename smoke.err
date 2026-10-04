@@ -1,0 +1,4 @@
+YENE_KB_ADMIN_TOKEN is not set - the knowledge base admin API is locked (this is the safe default).
+GOOGLE_CLIENT_ID is not set - 'Continue with Google' is unavailable. The password and email-code sign-ins still work.
+YOTI_API_KEY is not set - Yoti ID verification is unavailable. Submissions are held for manual review instead.
+ETRADE_VERIFY_URL / ETRADE_API_KEY are not set - Fayda ID and TIN cannot be checked automatically, so they stay 'pending-review' until a super admin approves them.

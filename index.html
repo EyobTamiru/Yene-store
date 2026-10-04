@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <!--
+      Both schemes are declared so the browser renders the native form controls
+      (scrollbars, date pickers, autofill) to match whichever theme is active.
+    -->
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#0D1117" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#F6F8FA" media="(prefers-color-scheme: light)" />
+    <!--
+      The two tags above follow the OPERATING SYSTEM preference. This third tag
+      follows the theme the visitor actually chose with the header toggle, and
+      is rewritten by src/components/marketplace/ThemeToggle.tsx. It is declared
+      after the others so it wins where a browser honours both - otherwise the
+      address bar would stay dark while a light-theme page is open.
+    -->
+    <meta id="yene-theme-color" name="theme-color" content="#0D1117" />
+    <meta
+      name="description"
+      content="YENE-STORE - rent a store, sell online, and manage your business. Marketplace, payments, delivery, inventory and CRM, powered by Yene Business Group."
+    />
+    <title>YENE-STORE | Build. Sell. Manage. Automate. Grow.</title>
+
+    <script>
+      /*
+       * THEME BOOTSTRAP - runs before the first paint.
+       *
+       * Without this the page paints dark, then snaps to light once React
+       * mounts, which is a visible flash on every load for a light-theme user.
+       * Setting `data-theme` on <html> here means the correct palette is
+       * already in place when the first pixel is drawn.
+       *
+       * Order of preference:
+       *   1. an explicit choice the user made, stored in localStorage;
+       *   2. otherwise, the operating system preference;
+       *   3. otherwise, dark (the YENE-STORE default).
+       */
+      (function () {
+        try {
+          var stored = localStorage.getItem("yene-theme");
+          var prefersLight =
+            window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: light)").matches;
+          var theme = stored === "light" || stored === "dark"
+            ? stored
+            : prefersLight
+              ? "light"
+              : "dark";
+          document.documentElement.setAttribute("data-theme", theme);
+          var swatch = document.getElementById("yene-theme-color");
+          if (swatch) {
+            swatch.setAttribute("content", theme === "light" ? "#F6F8FA" : "#0D1117");
+          }
+        } catch (error) {
+          // Private browsing can make localStorage throw. The attribute in the
+          // markup above is the fallback, so a failure here is not fatal.
+          document.documentElement.setAttribute("data-theme", "dark");
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

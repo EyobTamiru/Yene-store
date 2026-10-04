@@ -1,0 +1,11 @@
+node_modules
+dist
+.env
+.env.local
+*.log
+.DS_Store
+.vite
+
+# Local ticket store (created at runtime). Never commit customer support data.
+data/
+

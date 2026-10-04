@@ -1,0 +1,261 @@
+@import "tailwindcss";
+
+/* ===========================================================================
+   YENE-STORE DESIGN TOKENS
+   Build. Sell. Manage. Automate. Grow.  -  Powered by Yene Business Group.
+
+   The palette below is the specified visual identity. The TOKEN NAMES are the
+   project's original `yene-*` names, deliberately kept, so every existing
+   Section (1-9 support, 10-55 platform) keeps working against the same
+   variables instead of growing a second, competing palette.
+   =========================================================================== */
+/* ===========================================================================
+   LIGHT THEME
+
+   How this works, and why it needs no component changes
+   -----------------------------------------------------
+   Tailwind compiles `bg-yene-bg` to `background-color: var(--color-yene-bg)`.
+   It does NOT bake the hex value into the utility. So overriding the VARIABLE
+   under `[data-theme="light"]` re-themes every component in the application -
+   the marketplace, the storefront, the business dashboard, the cart and the
+   support widget - at once, with zero edits to any component file.
+
+   The alternative (a `dark:` variant on every element) would mean roughly 900
+   class changes and a new bug every time one was missed.
+
+   COLOUR CHOICES, AND WHY THEY DIFFER FROM DARK
+   ----------------------------------------------
+   * The accent deepens from #3DDC97 to #16A34A. The dark-mode green is
+     luminance ~0.75, which is illegible as text and nearly invisible as a
+     border on white. The light green is luminance ~0.42, which clears 4.5:1
+     against both white text and a white page.
+   * `--color-yene-on-accent` flips to white, so button labels stay readable.
+   * Borders, muted text and faint text all darken for the same contrast reason.
+   * Surfaces invert: a light page, slightly tinted cards, and hairline borders.
+   =========================================================================== */
+[data-theme="light"] {
+  --color-yene-bg: #f6f8fa;
+  --color-yene-surface: #ffffff;
+  --color-yene-raised: #eef1f5;
+  --color-yene-line-soft: #e3e8ee;
+  --color-yene-line: #cbd3dc;
+
+  --color-yene-accent: #16a34a;
+  --color-yene-accent-strong: #128040;
+  --color-yene-accent-dim: #16a34a1f;
+  --color-yene-accent-ring: #16a34a66;
+  --color-yene-on-accent: #ffffff;
+
+  --color-yene-text: #0b1220;
+  --color-yene-muted: #55606e;
+  --color-yene-faint: #7a8695;
+
+  --color-yene-danger: #dc2626;
+  --color-yene-warn: #b45309;
+  --color-yene-info: #2563eb;
+}
+
+/* Shadows read as mud on a light background, so they are softer and the
+   accent glow is removed entirely rather than recoloured. */
+[data-theme="light"] .yene-glow {
+  box-shadow: 0 1px 2px rgb(11 18 32 / 0.06), 0 4px 12px -6px rgb(11 18 32 / 0.12);
+}
+
+[data-theme="light"] ::selection {
+  background: #16a34a33;
+}
+
+/* ===========================================================================
+   YENE-STORE DESIGN TOKENS
+   Dark UI, #0D1117 canvas, #3DDC97 primary accent, light text, rounded cards.
+   =========================================================================== */
+@theme {
+  /* --- Surfaces ------------------------------------------------------- */
+  --color-yene-bg: #0d1117;              /* --background        */
+  --color-yene-surface: #161b22;         /* --surface           */
+  --color-yene-raised: #21262d;          /* --surface-secondary */
+  --color-yene-line-soft: #21262d;
+  --color-yene-line: #30363d;            /* --border            */
+
+  /* --- Brand ---------------------------------------------------------- */
+  --color-yene-accent: #3ddc97;          /* --primary           */
+  --color-yene-accent-strong: #2fc889;   /* --primary-hover     */
+  --color-yene-accent-dim: #3ddc971f;
+  --color-yene-accent-ring: #3ddc9759;
+
+  /* --- Text ----------------------------------------------------------- */
+  --color-yene-text: #ffffff;            /* --text-primary      */
+  --color-yene-muted: #b0b8c1;           /* --text-secondary    */
+  --color-yene-faint: #8b949e;
+
+  /**
+   * Text/icon colour ON an accent-filled surface.
+   *
+   * Dark mode fills buttons with the bright #3DDC97, so the label must be
+   * dark. Light mode uses a deeper green (below), where the label must be
+   * white. One token, both themes correct - which is what stops every one of
+   * the ~50 accent buttons from needing a theme-specific class.
+   */
+  --color-yene-on-accent: #0d1117;
+
+  /* --- Status --------------------------------------------------------- */
+  --color-yene-danger: #f85149;
+  --color-yene-warn: #d29922;
+  --color-yene-info: #58a6ff;
+
+  --font-sans: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+
+  /* --- Radii ---------------------------------------------------------- */
+  --radius-card: 20px;                   /* --radius-card       */
+  --radius-button: 12px;                 /* --radius-button     */
+
+  /* =====================================================================
+     RESPONSIVE BREAKPOINTS
+
+     These five ranges are the specification's, not Tailwind's defaults.
+     Tailwind v4 is mobile-first, so the smallest range is the unprefixed
+     base and each one below starts at the lower bound of the next:
+
+       base            320 - 767    phone
+       tablet:         768 - 1199   tablet
+       laptop:         1200 - 1439  laptop
+       desktop:        1440 - 1919  desktop
+       wide:           1920+        large display
+
+     The default `sm` (640) and `lg` (1024) breakpoints are deliberately not
+     used by the marketplace: a 640px handset is still a phone and must keep
+     the 2-column grid, which `sm:` would silently break.
+     ===================================================================== */
+  --breakpoint-tablet: 768px;
+  --breakpoint-laptop: 1200px;
+  --breakpoint-desktop: 1440px;
+  --breakpoint-wide: 1920px;
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    min-height: 100%;
+  }
+
+  body {
+    margin: 0;
+    background: var(--color-yene-bg);
+    color: var(--color-yene-text);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    /* Section 8: no horizontal overflow at any width. */
+    overflow-x: hidden;
+  }
+
+  /* Images never stretch a card. */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer utilities {
+  .yene-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-yene-line) transparent;
+  }
+  .yene-scroll::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  .yene-scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .yene-scroll::-webkit-scrollbar-thumb {
+    background: var(--color-yene-line);
+    border-radius: 999px;
+  }
+
+  .yene-glow {
+    box-shadow:
+      0 0 0 1px #3ddc9733,
+      0 10px 30px -10px #3ddc9759;
+  }
+
+  /* Home indicator on modern phones. */
+  .yene-safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  /* A horizontal rail that scrolls but shows no scrollbar (phone category
+     strip, promotion carousel). It is still keyboard scrollable, and the
+     overflow-x is deliberate - it is inside a full-width container, so the
+     page itself does not scroll sideways.
+
+     DO NOT PUT A VISIBILITY CLASS ON THE SAME ELEMENT
+     -------------------------------------------------
+     This rule sets `display:flex` and is emitted AFTER Tailwind's generated
+     utilities. `tablet:hidden`, `hidden` and `laptop:hidden` are all
+     single-class selectors, so the LATER rule wins and `display:flex` silently
+     overrides `display:none`. A rail written as
+
+         <div className="yene-rail tablet:hidden">   // WRONG
+
+     is therefore visible at EVERY width - which is what put the phone category
+     rail and the desktop bar on screen at the same time.
+
+     Put the breakpoint class on a WRAPPER instead:
+
+         <div className="tablet:hidden">
+           <div className="yene-rail">...</div>
+         </div>
+
+     which is what CategoryNavigation.tsx now does. */
+  .yene-rail {
+    display: flex;
+    gap: 0.75rem;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .yene-rail::-webkit-scrollbar {
+    display: none;
+  }
+  .yene-rail > * {
+    scroll-snap-align: start;
+    flex: 0 0 auto;
+  }
+
+  /* Clamp helpers for consistent card heights. */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+/* Typing indicator bounce (Section 7 support widget). */
+@keyframes yene-bounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.45; }
+  30% { transform: translateY(-4px); opacity: 1; }
+}
+
+.yene-dot {
+  animation: yene-bounce 1.1s infinite ease-in-out;
+}
